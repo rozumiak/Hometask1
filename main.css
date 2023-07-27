@@ -44,6 +44,9 @@ tr {
 button {
     margin: 1% 0 0 0;
 }
+.table-archive {
+    padding: 10px;
+}
 
 .modal {
     display: none;

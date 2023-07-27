@@ -6,6 +6,7 @@ const notes = [
         category: "Task",
         content: "Tomatoes,bread",
         dates: "",
+        isArchived: false,
     },
     {
         id: Date.now() + 2,
@@ -14,6 +15,7 @@ const notes = [
         category: "Random thought",
         content: "Evolution",
         dates: "",
+        isArchived: false,
     },
     {
         id: Date.now() + 3,
@@ -22,6 +24,7 @@ const notes = [
         category: "Idea",
         content: "Implement new feature on the 07.05.2021",
         dates: "07.05.2021",
+        isArchived: false,
     },
     {
         id: Date.now() + 4,
@@ -30,6 +33,7 @@ const notes = [
         category: "Idea",
         content: "You shell not pass",
         dates: "",
+        isArchived: false,
     },
     {
         id: Date.now() + 5,
@@ -38,6 +42,7 @@ const notes = [
         category: "Task",
         content: "Learn new language",
         dates: "",
+        isArchived: false,
     },
     {
         id: Date.now() + 6,
@@ -46,6 +51,7 @@ const notes = [
         category: "Random thought",
         content: "Drink",
         dates: "",
+        isArchived: false,
     },
     {
         id: Date.now() + 7,
@@ -54,6 +60,7 @@ const notes = [
         category: "Random thought",
         content: "Oh, yeah",
         dates: "",
+        isArchived: false,
     },
 ];
 
@@ -61,9 +68,21 @@ function UserTasks(_form, notes) {
     const _btn = _form.querySelector("button");
     const _countActiveIdea = document.querySelector(".js--count-active-idea");
     const _countActiveTask = document.querySelector(".js--count-active-task");
-    const _countActiveThought = document.querySelector(".js--count-active-thought");
+    const _countActiveThought = document.querySelector(
+        ".js--count-active-thought"
+    );
+    const _countArchiveIdea = document.querySelector(".js--count-archive-idea");
+    const _countArchiveTask = document.querySelector(".js--count-archive-task");
+    const _countArchiveThought = document.querySelector(
+        ".js--count-archive-thought"
+    );
+    const _tbodyArchive = document.querySelector(".js--tbody-archive");
 
     const _archiveAll = _form.querySelector(".js--archive-all");
+    const _unzipAll = document
+        .querySelector(".table-archive")
+        .querySelector(".js--archive-all");
+
     const _deleteAll = _form.querySelector(".js--delete-all");
     const _table = _form.querySelector("table");
     const _tbody = _form.querySelector("tbody");
@@ -73,7 +92,7 @@ function UserTasks(_form, notes) {
     this._notes = notes;
     this.currentItemId = null;
 
-    this.createNote = function (content) {
+    this.createNote = function (content, isArchived = false) {
         return `
         <tr data-id="${content.id}">
             <td>${content.name}</td>
@@ -82,35 +101,67 @@ function UserTasks(_form, notes) {
             <td>${content.content}</td>
             <td>${content.dates}</td>
             <td>
-                <img class="js--edit" src="./icons/edit.png" alt="Edit" />
+                ${
+                    !isArchived
+                        ? '<img class="js--edit" src="./icons/edit.png" alt="Edit" />'
+                        : ""
+                }
                 <img class="js--archive" src="./icons/archive.png" alt="Archive" />
-                <img class="js--delete" src="./icons/delete.png" alt="Delete" />
+                ${
+                    !isArchived
+                        ? '<img class="js--delete" src="./icons/delete.png" alt="Delete" />'
+                        : ""
+                }
             </td>
         </tr>`;
     };
 
     this.renderTable = function (notes) {
+        const archivedRows = notes
+            .filter((note) => note.isArchived === true)
+            .map((element) => this.createNote(element, true))
+            .join("");
+
+        const rows = notes
+            .filter((note) => note.isArchived === false)
+            .map((element) => this.createNote(element))
+            .join("");
+
         _tbody.innerHTML = "";
-        const rows = notes.map((element) => this.createNote(element)).join("");
+        _tbodyArchive.innerHTML = "";
         _tbody.insertAdjacentHTML("beforeend", rows);
+        _tbodyArchive.innerHTML = archivedRows;
 
         document.querySelectorAll(".js--delete").forEach((item) => {
             item.addEventListener("click", this.deleteNote);
         });
+
         document.querySelectorAll(".js--edit").forEach((item) => {
             item.addEventListener("click", this.editNote);
         });
+
         document.querySelectorAll(".js--archive").forEach((item) => {
             item.addEventListener("click", this.archiveNote);
         });
+
+        _archiveAll.addEventListener("click", this.archiveAll);
+        _unzipAll.addEventListener("click", this.unzipAll);
+
         const {
             countIdeaCategory,
             countTaskCategory,
             countRandomThoughtCategory,
+            countArchiveIdeaCategory,
+            countArchiveTaskCategory,
+            countArchiveRandomThoughtCategory,
         } = this.getCountCategory();
+
         _countActiveIdea.innerHTML = countIdeaCategory;
         _countActiveTask.innerHTML = countTaskCategory;
         _countActiveThought.innerHTML = countRandomThoughtCategory;
+        _countArchiveIdea.innerHTML = countArchiveIdeaCategory;
+        _countArchiveTask.innerHTML = countArchiveTaskCategory;
+        _countArchiveThought.innerHTML = countArchiveRandomThoughtCategory;
     };
 
     this.parseDate = function (contentValue) {
@@ -129,21 +180,37 @@ function UserTasks(_form, notes) {
     };
     this.getCountCategory = () => {
         const IdeaCategory = this._notes.filter(
-            (item) => item.category === "Idea"
+            (item) => item.category === "Idea" && !item.isArchived
         );
         const TaskCategory = this._notes.filter(
-            (item) => item.category === "Task"
+            (item) => item.category === "Task" && !item.isArchived
         );
         const RandomThoughtCategory = this._notes.filter(
-            (item) => item.category === "Random thought"
+            (item) => item.category === "Random thought" && !item.isArchived
+        );
+        const archiveIdeaCategory = this._notes.filter(
+            (item) => item.category === "Idea" && item.isArchived
+        );
+        const archiveTaskCategory = this._notes.filter(
+            (item) => item.category === "Task" && item.isArchived
+        );
+        const archiveRandomThoughtCategory = this._notes.filter(
+            (item) => item.category === "Random thought" && item.isArchived
         );
         const countIdeaCategory = IdeaCategory.length;
         const countTaskCategory = TaskCategory.length;
         const countRandomThoughtCategory = RandomThoughtCategory.length;
+        const countArchiveIdeaCategory = archiveIdeaCategory.length;
+        const countArchiveTaskCategory = archiveTaskCategory.length;
+        const countArchiveRandomThoughtCategory =
+            archiveRandomThoughtCategory.length;
         return {
             countIdeaCategory,
             countTaskCategory,
             countRandomThoughtCategory,
+            countArchiveIdeaCategory,
+            countArchiveTaskCategory,
+            countArchiveRandomThoughtCategory,
         };
     };
 
@@ -165,7 +232,37 @@ function UserTasks(_form, notes) {
             this.currentItemId = currentNote.id;
         }
     };
-    this.archiveNote = () => {};
+
+    this.archiveAll = () => {
+        this._notes = this._notes.map((note) => ({
+            ...note,
+            isArchived: true,
+        }));
+
+        this.renderTable(this._notes);
+    };
+    this.unzipAll = () => {
+        this._notes = this._notes.map((note) => ({
+            ...note,
+            isArchived: false,
+        }));
+
+        this.renderTable(this._notes);
+    };
+
+    this.archiveNote = (event) => {
+        const currentItem = event.target.closest("tr");
+
+        this._notes = this._notes.map((note) => ({
+            ...note,
+            ...(note.id === +currentItem.dataset.id && {
+                isArchived: !note.isArchived,
+            }),
+        }));
+
+        this.renderTable(this._notes);
+    };
+
     this.deleteNote = (event) => {
         const currentItem = event.target.closest("tr");
         this._notes = this._notes.filter(
@@ -180,6 +277,7 @@ function UserTasks(_form, notes) {
             _table.deleteRow(i);
         }
         notes.length = 0;
+        this.renderTable(this._notes);
     };
 
     this.renderTable(this._notes);
@@ -220,6 +318,7 @@ function UserTasks(_form, notes) {
                         category: _categoryValue.value,
                         content: _contentValue.value,
                         dates: this.parseDate(_contentValue.value),
+                        isArchived: false,
                     },
                 ];
             }
