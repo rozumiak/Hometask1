@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="main.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Note Taking App</h1>
+            <form action="#" class="js--form">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created</th>
+                            <th>Category</th>
+                            <th>Content</th>
+                            <th>Dates</th>
+                            <th>
+                                <img
+                                    class="js--archive-all"
+                                    src="./icons/archive.png"
+                                    alt="ArchiveAll"
+                                />
+                                <img
+                                    class="js--delete-all"
+                                    src="./icons/delete.png"
+                                    alt="DeleteAll"
+                                />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button type="submit">Create Note</button>
+                <div class="modal">
+                    <div class="modal-content">
+                        <h2>Add note</h2>
+                        <form>
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" required />
+
+                            <select name="category" id="category">
+                                <option value="Idea">Idea</option>
+                                <option value="Task" selected>Task</option>
+                                <option value="Random thought">
+                                    Random thought
+                                </option>
+                            </select>
+
+                            <label for="content">Content:</label>
+                            <textarea
+                                id="content"
+                                required
+                                cols="20"
+                                rows="10"
+                            ></textarea>
+
+                            <button type="submit">Додати</button>
+                        </form>
+                    </div>
+                </div>
+            </form>
+            <form action="#">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Note Category</th>
+                            <th>Active</th>
+                            <th>Archived</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data 1-1</td>
+                            <td>Data 1-2</td>
+                            <td>Data 1-3</td>
+                        </tr>
+                        <tr>
+                            <td>Data 2-1</td>
+                            <td>Data 2-2</td>
+                            <td>Data 2-3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <script src="./main.js"></script>
+    </body>
+</html>
