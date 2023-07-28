@@ -1,70 +1,4 @@
-const notes = [
-    {
-        id: Date.now() + 1,
-        name: "Shopping list",
-        created: "20.03.2021",
-        category: "Task",
-        content: "Tomatoes,bread",
-        dates: "",
-        isArchived: false,
-    },
-    {
-        id: Date.now() + 2,
-        name: "The theory",
-        created: "27.03.2021",
-        category: "Random thought",
-        content: "Evolution",
-        dates: "",
-        isArchived: false,
-    },
-    {
-        id: Date.now() + 3,
-        name: "New Feature",
-        created: "05.05.2021",
-        category: "Idea",
-        content: "Implement new feature on the 07.05.2021",
-        dates: "07.05.2021",
-        isArchived: false,
-    },
-    {
-        id: Date.now() + 4,
-        name: "William Gaddis",
-        created: "07.03.2021",
-        category: "Idea",
-        content: "You shell not pass",
-        dates: "",
-        isArchived: false,
-    },
-    {
-        id: Date.now() + 5,
-        name: "Books",
-        created: "15.05.2021",
-        category: "Task",
-        content: "Learn new language",
-        dates: "",
-        isArchived: false,
-    },
-    {
-        id: Date.now() + 6,
-        name: "Go in bar",
-        created: "20.07.2021",
-        category: "Random thought",
-        content: "Drink",
-        dates: "",
-        isArchived: false,
-    },
-    {
-        id: Date.now() + 7,
-        name: "Take a shower",
-        created: "21.02.2021",
-        category: "Random thought",
-        content: "Oh, yeah",
-        dates: "",
-        isArchived: false,
-    },
-];
-
-function UserTasks(_form, notes) {
+export function UserTasks(_form, notes) {
     const _btn = _form.querySelector("button");
     const _countActiveIdea = document.querySelector(".js--count-active-idea");
     const _countActiveTask = document.querySelector(".js--count-active-task");
@@ -302,6 +236,7 @@ function UserTasks(_form, notes) {
                         ...currentNote,
                         name: _nameValue.value,
                         content: _contentValue.value,
+                        dates: this.parseDate(_contentValue.value),
                     };
                     const index = this._notes.findIndex(
                         (item) => item.id === this.currentItemId
@@ -330,6 +265,3 @@ function UserTasks(_form, notes) {
         }
     });
 }
-
-const userForm = document.querySelector(".js--form");
-const task = new UserTasks(userForm, notes);
